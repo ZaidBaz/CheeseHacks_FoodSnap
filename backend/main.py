@@ -6,8 +6,17 @@ from PIL import Image
 import io
 import requests
 import json
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 with open('../db_json_file_name.json', 'r') as db_file_name:
     dbFName = json.load(db_file_name)
@@ -56,7 +65,7 @@ async def predict_image(file: UploadFile = File(...)):
             f.write(contents)
 
         # TODO: CHANGE URL TO REFLECT FLASK APP RUNNING ON GOOGLE COLAB
-        url = "https://c456-34-139-212-69.ngrok-free.app/detect"
+        url = "https://ed84-34-139-212-69.ngrok-free.app/detect"
 
         with open("temp.jpg", "rb") as img:
             files = {"image": img}
