@@ -9,7 +9,12 @@ import json
 
 app = FastAPI()
 
-cred = credentials.Certificate("./Firebase_db_auth/foodsnap-f642c-firebase-adminsdk-8af48-bd0617d3d4.json")
+with open('dbfilename.json', 'r') as db_file_name:
+    dbFName = json.load(db_file_name)
+
+auth_file_name = dbFName["File_Name"]
+
+cred = credentials.Certificate(f"./{auth_file_name}")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
