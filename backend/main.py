@@ -50,6 +50,7 @@ async def predict_image(file: UploadFile = File(...)):
         with open("temp.jpg", "wb") as f:
             f.write(contents)
 
+        # TODO: CHANGE URL TO REFLECT FLASK APP RUNNING ON GOOGLE COLAB
         url = "http://127.0.0.1:5000/detect"
 
         with open("temp.jpg", "rb") as img:
