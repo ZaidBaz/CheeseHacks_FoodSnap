@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
+import './App.css'; // Link the CSS file
 
 function App() {
-  const [photo, setPhoto] = useState(null); // Selected photo
-  const [items, setItems] = useState([]); // List of items from backend
-  const [loading, setLoading] = useState(false); // Loading state
+  const [photo, setPhoto] = useState(null);
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Handle file selection
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     setPhoto(file);
   };
 
-  // Upload photo and fetch results
   const handleUpload = async () => {
     if (!photo) {
-      alert('Please select a photo to upload!');
+      alert('Upload a photo');
       return;
     }
 
@@ -23,17 +22,17 @@ function App() {
 
     setLoading(true);
     try {
-      // Simulate backend response delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch('http://localhost:5000/detect', {
+        method: 'POST',
+        body: formData,
+      });
 
-      // Mock response: Replace with actual backend fetch
-      const mockResponse = [
-        { name: "Item 1", calories: "200 kcal", fats: "10g", sugars: "15g" },
-        { name: "Item 2", calories: "150 kcal", fats: "8g", sugars: "10g" },
-        { name: "Item 3", calories: "300 kcal", fats: "12g", sugars: "20g" },
-      ];
+      if (!response.ok) {
+        throw new Error('Error during detection');
+      }
 
-      setItems(mockResponse); // Set items in state
+      const data = await response.json();
+      setResults(data.detections || []);
     } catch (error) {
       console.error('Error uploading photo:', error);
       alert('Failed to process image');
@@ -43,24 +42,31 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Nutrition Information Detection</h1>
-      <input type="file" accept="image/*" onChange={handlePhotoChange} />
-      <br />
-      <button onClick={handleUpload} style={{ marginTop: '10px' }}>
-        {loading ? 'Processing...' : 'Upload and Detect'}
-      </button>
-      {/* Display the list of items */}
-      {items.length > 0 && (
-        <div style={{ marginTop: '20px' }}>
+    <div className="app-container">
+      <h1 className="app-title">Nutrition Information</h1>
+      <div className="upload-section">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handlePhotoChange}
+          className="upload-input"
+        />
+        <button onClick={handleUpload} className="upload-button">
+          {loading ? 'Processing...' : 'Upload to Detect'}
+        </button>
+      </div>
+      {results.length > 0 && (
+        <div className="results-section">
           <h2>Nutrition Details:</h2>
-          <ul>
-            {items.map((item, index) => (
-              <li key={index} style={{ marginBottom: '10px' }}>
+          <ul className="results-list">
+            {results.map((item, index) => (
+              <li key={index} className="result-item">
                 <strong>{item.name}</strong>
-                <p>Calories: {item.calories}</p>
-                <p>Fats: {item.fats}</p>
-                <p>Sugars: {item.sugars}</p>
+                <p>Quantity: {item.quantity}</p>
+                <p>Total Calories: {item.calories}</p>
+                <p>Total Carbohydrates: {item.carbohydrates}</p>
+                <p>Total Fiber: {item.fiber}</p>
+                <p>Total Protein: {item.protein}</p>
               </li>
             ))}
           </ul>

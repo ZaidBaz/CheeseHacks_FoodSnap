@@ -56,7 +56,7 @@ async def predict_image(file: UploadFile = File(...)):
             f.write(contents)
 
         # TODO: CHANGE URL TO REFLECT FLASK APP RUNNING ON GOOGLE COLAB
-        url = "https://fb88-34-72-35-183.ngrok-free.app/detect"
+        url = "https://c456-34-139-212-69.ngrok-free.app/detect"
 
         with open("temp.jpg", "rb") as img:
             files = {"image": img}
