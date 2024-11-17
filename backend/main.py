@@ -9,7 +9,7 @@ import json
 
 app = FastAPI()
 
-with open('../dbfilename.json', 'r') as db_file_name:
+with open('../db_json_file_name.json', 'r') as db_file_name:
     dbFName = json.load(db_file_name)
 
 auth_file_name = dbFName["File_Name"]
