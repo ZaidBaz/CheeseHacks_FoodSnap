@@ -8,13 +8,15 @@ import requests
 import json
 
 app = FastAPI()
+print("here")
 
-with open('dbfilename.json', 'r') as db_file_name:
+with open('../dbfilename.json', 'r') as db_file_name:
     dbFName = json.load(db_file_name)
 
+print("here")
 auth_file_name = dbFName["File_Name"]
 
-cred = credentials.Certificate(f"./{auth_file_name}")
+cred = credentials.Certificate(f"../{auth_file_name}")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
