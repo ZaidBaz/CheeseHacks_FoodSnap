@@ -8,12 +8,10 @@ import requests
 import json
 
 app = FastAPI()
-print("here")
 
 with open('../dbfilename.json', 'r') as db_file_name:
     dbFName = json.load(db_file_name)
 
-print("here")
 auth_file_name = dbFName["File_Name"]
 
 cred = credentials.Certificate(f"../{auth_file_name}")
@@ -58,7 +56,7 @@ async def predict_image(file: UploadFile = File(...)):
             f.write(contents)
 
         # TODO: CHANGE URL TO REFLECT FLASK APP RUNNING ON GOOGLE COLAB
-        url = "http://127.0.0.1:5000/detect"
+        url = "https://066d-34-72-35-183.ngrok-free.app/detect"
 
         with open("temp.jpg", "rb") as img:
             files = {"image": img}
